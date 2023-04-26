@@ -28,6 +28,6 @@
 #ifndef JACOBI_H
 #define JACOBI_H
 
-#define N_ROWS 512
+#define N_ROWS 32
 
 #endif

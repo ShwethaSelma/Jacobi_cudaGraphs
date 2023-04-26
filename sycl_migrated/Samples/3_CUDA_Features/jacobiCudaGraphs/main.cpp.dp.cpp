@@ -50,7 +50,7 @@
 // cudaGraphExecKernelNodeSetParams().
 extern double JacobiMethodGpuCudaGraphExecKernelSetParams(
     const float *A, const double *b, const float conv_threshold,
-    const int max_iter, double *x, double *x_new, dpct::queue_ptr stream, sycl::queue q);
+    const int max_iter, double *x, double *x_new, sycl::queue q);
 
 // Run the Jacobi method for A*x = b on GPU with Instantiated CUDA Graph Update
 // API - cudaGraphExecUpdate().
@@ -61,7 +61,7 @@ extern double JacobiMethodGpuCudaGraphExecKernelSetParams(
 // Run the Jacobi method for A*x = b on GPU without CUDA Graph.
 extern double JacobiMethodGpu(const float *A, const double *b,
                               const float conv_threshold, const int max_iter,
-                              double *x, double *x_new, dpct::queue_ptr stream, sycl::queue q);
+                              double *x, double *x_new, sycl::queue q);
 
 // creates N_ROWS x N_ROWS matrix A with N_ROWS+1 on the diagonal and 1
 // elsewhere. The elements of the right hand side b all equal 2*n, hence the
@@ -97,8 +97,10 @@ int main(int argc, char **argv) {
     }
   }
 
-  //int dev = findCudaDevice(argc, (const char **)argv);
-  sycl::queue q = dpct::get_default_queue();
+  sycl::queue q{sycl::default_selector_v, sycl::property::queue::in_order()};
+
+  std::cout << "\nRunning on "
+            << q.get_device().get_info<sycl::info::device::name>() << "\n";
 
   double *b = NULL;
   float *A = NULL;
@@ -137,8 +139,6 @@ int main(int argc, char **argv) {
  
   float *d_A;
   double *d_b, *d_x, *d_x_new;
-  dpct::queue_ptr stream1;
-  stream1 = dpct::get_current_device().create_queue();
   
   d_b = sycl::malloc_device<double>(N_ROWS, q);
 
@@ -147,10 +147,12 @@ int main(int argc, char **argv) {
   d_x = sycl::malloc_device<double>(N_ROWS, q);
   d_x_new = sycl::malloc_device<double>(N_ROWS, q);
 
-  stream1->memset(d_x, 0, sizeof(double) * N_ROWS);
-  stream1->memset(d_x_new, 0, sizeof(double) * N_ROWS);
-  stream1->memcpy(d_A, A, sizeof(float) * N_ROWS * N_ROWS);
-  stream1->memcpy(d_b, b, sizeof(double) * N_ROWS);
+  q.memset(d_x, 0, sizeof(double) * N_ROWS);
+  q.memset(d_x_new, 0, sizeof(double) * N_ROWS);
+  q.memcpy(d_A, A, sizeof(float) * N_ROWS * N_ROWS);
+  q.memcpy(d_b, b, sizeof(double) * N_ROWS);
+  
+  q.wait();
 
   sdkCreateTimer(&timerGpu);
   sdkStartTimer(&timerGpu);
@@ -158,19 +160,11 @@ int main(int argc, char **argv) {
   double sumGPU = 0.0;
   if (gpumethod == 0) {
     sumGPU = JacobiMethodGpuCudaGraphExecKernelSetParams(
-        d_A, d_b, conv_threshold, max_iter, d_x, d_x_new, stream1, q);
+        d_A, d_b, conv_threshold, max_iter, d_x, d_x_new, q);
 
-  /*} else if (gpumethod == 1) {
-    sumGPU = JacobiMethodGpuCudaGraphExecUpdate(
-        d_A, d_b, conv_threshold, max_iter, d_x, d_x_new, stream1);*/
   } else if (gpumethod == 1) {
-    sumGPU = JacobiMethodGpu(d_A, d_b, conv_threshold, max_iter, d_x, d_x_new,
-                             stream1, q);
+    sumGPU = JacobiMethodGpu(d_A, d_b, conv_threshold, max_iter, d_x, d_x_new, q);
   }
- // sumGPU = JacobiMethodGpu(d_A, d_b, conv_threshold, max_iter, d_x, d_x_new,
-   //                        stream1);
-
-
   sdkStopTimer(&timerGpu);
   printf("GPU Processing time: %f (ms)\n", sdkGetTimerValue(&timerGpu));
 

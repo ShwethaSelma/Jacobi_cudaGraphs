@@ -35,10 +35,10 @@
 
 // 8 Rows of square-matrix A processed by each CTA.
 // This can be max 32 and only power of 2 (i.e., 2/4/8/16/32).
-#define ROWS_PER_CTA 8 //change it to 32
+#define ROWS_PER_CTA 16 
 #define SUB_GRP_SIZE 32
 
-#if !defined(DPCT_COMPATIBILITY_TEMP) || DPCT_COMPATIBILITY_TEMP >= 600
+/*#if !defined(DPCT_COMPATIBILITY_TEMP) || DPCT_COMPATIBILITY_TEMP >= 600
 #else
 __device__ double atomicAdd(double *address, double val) {
   unsigned long long int *address_as_ull = (unsigned long long int *)address;
@@ -55,7 +55,7 @@ __device__ double atomicAdd(double *address, double val) {
 
   return __longlong_as_double(old);
 }
-#endif
+#endif*/
 
 static void JacobiMethod(const float *A, const double *b,
                                     const float conv_threshold, double *x,
@@ -80,11 +80,6 @@ static void JacobiMethod(const float *A, const double *b,
     }
   }
 
-  /*
-  DPCT1065:0: Consider replacing sycl::nd_item::barrier() with
-  sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better
-  performance if there is no access to global memory.
-  */
   item_ct1.barrier();
 
   sycl::sub_group tile32 = item_ct1.get_sub_group();
@@ -108,11 +103,6 @@ static void JacobiMethod(const float *A, const double *b,
     }
   }
 
-  /*
-  DPCT1065:1: Consider replacing sycl::nd_item::barrier() with
-  sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better
-  performance if there is no access to global memory.
-  */
   item_ct1.barrier();
 
   if (item_ct1.get_local_id(2) < ROWS_PER_CTA) {
@@ -174,11 +164,6 @@ static void finalError(double *x, double *g_sum,
             item_ct1.get_sub_group().get_local_range().get(0)] = sum;
   }
 
-  /*
-  DPCT1065:2: Consider replacing sycl::nd_item::barrier() with
-  sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better
-  performance if there is no access to global memory.
-  */
   item_ct1.barrier();
 
   double blockSum = 0.0;
@@ -203,7 +188,7 @@ static void finalError(double *x, double *g_sum,
 
 double JacobiMethodGpuCudaGraphExecKernelSetParams(
     const float *A, const double *b, const float conv_threshold,
-    const int max_iter, double *x, double *x_new, dpct::queue_ptr stream, sycl::queue q) {
+    const int max_iter, double *x, double *x_new, sycl::queue q) {
   // CTA size
   sycl::range<3> nthreads(1, 1, 256);
   // grid size
@@ -218,20 +203,18 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
   d_sum = sycl::malloc_device<double>(1, q);
   int k = 0;
 
-  //k-loop
   for (k = 0; k < max_iter; k++) {
 
   tf::Task syclDeviceTasks = tflow.emplace_on([&](tf::syclFlow &sf) {
 
   tf::syclTask dsum_memset = sf.memset(d_sum, 0, sizeof(double)) .name("dsum_memset");
-
+    
   auto arg1 = x_new, arg2 = x;
   if((k & 1) == 0) {
     arg1 = x;
     arg2 = x_new;
   }
    
-  //nodeparam0
   tf::syclTask jM_kernel =
                     sf.on([=](sycl::handler &cgh) {
                          sycl::local_accessor<double, 1> x_shared_acc_ct1(
@@ -248,43 +231,26 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
                            b_shared_acc_ct1.get_pointer());
 				    });
 			}).name("jacobiMethod_kernel0");
- 
-  //nodeparm1
-  /*tf::syclTask jM_kernel1 =
-                    sf.on([=](sycl::handler &cgh) {
-                         sycl::local_accessor<double, 1> x_shared_acc_ct1(
-                             sycl::range<1>(N_ROWS), cgh);
-
-                    sycl::local_accessor<double, 1> b_shared_acc_ct1(
-                        sycl::range<1>(ROWS_PER_CTA + 1), cgh);
-                        cgh.parallel_for(
-                            sycl::nd_range<3>(nblocks * nthreads, nthreads),
-                            [=](sycl::nd_item<3> item_ct1)
-                                [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
-                                    JacobiMethod(A, b, conv_threshold, x_new, x, d_sum, item_ct1,
-                           x_shared_acc_ct1.get_pointer(),
-                           b_shared_acc_ct1.get_pointer());
-                                    });
-                        }).name("jacobiMethod_kernel1");*/
   
   tf::syclTask sum_d2h = sf.memcpy(&sum, d_sum, sizeof(double)).name("sum_d2h");
+  q.wait();
   
   jM_kernel.succeed(dsum_memset).precede(sum_d2h);
   }, q).name("syclDeviceTasks");//end of emplace
 
   exe.run(tflow).wait(); 
   
-  //stream->wait();
+  //q.wait();
 
     if (sum <= conv_threshold) {
 
-      stream->memset(d_sum, 0, sizeof(double));
+      q.memset(d_sum, 0, sizeof(double));
       nblocks[2] = (N_ROWS / nthreads[2]) + 1;
 
       size_t sharedMemSize = ((nthreads[2] / SUB_GRP_SIZE) + 1) * sizeof(double);
       if ((k & 1) == 0) {
 
-        stream->submit([&](sycl::handler &cgh) {
+        q.submit([&](sycl::handler &cgh) {
           sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(
               sycl::range<1>(sharedMemSize), cgh);
 
@@ -297,7 +263,7 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
         });
       } else {
 
-        stream->submit([&](sycl::handler &cgh) {
+        q.submit([&](sycl::handler &cgh) {
           sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(
               sycl::range<1>(sharedMemSize), cgh);
 
@@ -309,21 +275,20 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
                                });
         });
       }
-      stream->memcpy(&sum, d_sum, sizeof(double)).wait();
-
-     // stream->wait();   // following lines dont print 
+      q.memcpy(&sum, d_sum, sizeof(double)).wait();
       printf("GPU iterations : %d\n", k + 1);
       printf("GPU error : %.3e\n", sum);
       break;
     }
   }
+  //q.wait();
   sycl::free(d_sum, q);
   return sum;
 }
 
 double JacobiMethodGpu(const float *A, const double *b,
                        const float conv_threshold, const int max_iter,
-                       double *x, double *x_new, dpct::queue_ptr stream, sycl::queue q) {
+                       double *x, double *x_new, sycl::queue q) {
   // CTA size
   sycl::range<3> nthreads(1, 1, 256);
   // grid size
@@ -331,15 +296,14 @@ double JacobiMethodGpu(const float *A, const double *b,
 
   double sum = 0.0;
   double *d_sum;
-  //sycl::queue q = dpct::get_default_queue();
   d_sum = sycl::malloc_device<double>(1, q);
   int k = 0;
 
   for (k = 0; k < max_iter; k++) {
-    stream->memset(d_sum, 0, sizeof(double));
+    q.memset(d_sum, 0, sizeof(double));
     if ((k & 1) == 0) {
       
-      stream->submit([&](sycl::handler &cgh) {
+      q.submit([&](sycl::handler &cgh) {
        
 	sycl::local_accessor<double, 1> x_shared_acc_ct1(
             sycl::range<1>(N_ROWS), cgh);
@@ -357,7 +321,7 @@ double JacobiMethodGpu(const float *A, const double *b,
       });
     } else {
     
-      stream->submit([&](sycl::handler &cgh) {
+      q.submit([&](sycl::handler &cgh) {
         
         sycl::local_accessor<double, 1> x_shared_acc_ct1(
             sycl::range<1>(N_ROWS), cgh);
@@ -374,17 +338,17 @@ double JacobiMethodGpu(const float *A, const double *b,
             });
       });
     }
-    stream->memcpy(&sum, d_sum, sizeof(double));
-    stream->wait();
+    q.memcpy(&sum, d_sum, sizeof(double));
+    q.wait();
 
     if (sum <= conv_threshold) {
-      stream->memset(d_sum, 0, sizeof(double));
+      q.memset(d_sum, 0, sizeof(double));
       nblocks[2] = (N_ROWS / nthreads[2]) + 1;
     
       size_t sharedMemSize = ((nthreads[2] / SUB_GRP_SIZE) + 1) * sizeof(double);
       if ((k & 1) == 0) {
         
-        stream->submit([&](sycl::handler &cgh) {
+        q.submit([&](sycl::handler &cgh) {
           sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(
               sycl::range<1>(sharedMemSize), cgh);
 
@@ -397,7 +361,7 @@ double JacobiMethodGpu(const float *A, const double *b,
         });
       } else {
         
-        stream->submit([&](sycl::handler &cgh) {
+        q.submit([&](sycl::handler &cgh) {
           sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(
               sycl::range<1>(sharedMemSize), cgh);
 
@@ -410,8 +374,8 @@ double JacobiMethodGpu(const float *A, const double *b,
         });
       }
 
-      stream->memcpy(&sum, d_sum, sizeof(double));
-      stream->wait();
+      q.memcpy(&sum, d_sum, sizeof(double));
+      q.wait();
       printf("GPU iterations : %d\n", k + 1);
       printf("GPU error : %.3e\n", sum);
       break;

@@ -1,3 +1,9 @@
+//=========================================================
+// Modifications Copyright © 2022 Intel Corporation
+//
+// SPDX-License-Identifier: BSD-3-Clause
+//=========================================================
+
 /* Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,7 +34,6 @@
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include <taskflow/sycl/syclflow.hpp>
-//#include <cooperative_groups.h>
 #include <helper_cuda.h>
 #include <vector>
 #include "jacobi.h"
@@ -64,7 +69,6 @@ static void JacobiMethod(const float *A, const double *b,
                                     double *x_shared, double *b_shared) {
   // Handle to thread block group
   auto cta = item_ct1.get_group();
-    // N_ROWS == n
 
   for (int i = item_ct1.get_local_id(2); i < N_ROWS;
        i += item_ct1.get_local_range(2)) {
@@ -185,7 +189,6 @@ static void finalError(double *x, double *g_sum,
   }
 }
 
-
 double JacobiMethodGpuCudaGraphExecKernelSetParams(
     const float *A, const double *b, const float conv_threshold,
     const int max_iter, double *x, double *x_new, sycl::queue q) {
@@ -199,6 +202,7 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
 
   double sum = 0.0;
   double *d_sum = NULL;
+  double *params[] = {x, x_new};
 
   d_sum = sycl::malloc_device<double>(1, q);
   int k = 0;
@@ -206,12 +210,6 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
   tf::Task syclDeviceTasks = tflow.emplace_on([&](tf::syclFlow &sf) {
 
   tf::syclTask dsum_memset = sf.memset(d_sum, 0, sizeof(double)) .name("dsum_memset");
-    
-  auto arg1 = x_new, arg2 = x;
-  if((k & 1) == 0) {
-    arg1 = x;
-    arg2 = x_new;
-  }
    
   tf::syclTask jM_kernel =
                     sf.on([=](sycl::handler &cgh) {
@@ -224,7 +222,7 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
                             sycl::nd_range<3>(nblocks * nthreads, nthreads),
                             [=](sycl::nd_item<3> item_ct1)
                                 [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
-                                    JacobiMethod(A, b, conv_threshold, arg1, arg2, d_sum, item_ct1,
+                                    JacobiMethod(A, b, conv_threshold, params[k % 2], params[(k + 1) % 2], d_sum, item_ct1,
                            x_shared_acc_ct1.get_pointer(),
                            b_shared_acc_ct1.get_pointer());
 				    });

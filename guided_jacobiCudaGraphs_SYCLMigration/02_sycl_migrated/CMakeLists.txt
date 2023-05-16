@@ -7,4 +7,5 @@ include_directories(${CMAKE_SOURCE_DIR}/02_sycl_migrated/include/)
 add_executable (02_sycl_migrated Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.dp.cpp Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp.dp.cpp)
 target_link_libraries(02_sycl_migrated sycl)
 
-add_custom_target (run cd ${CMAKE_SOURCE_DIR}/02_sycl_migrated/ && ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/02_sycl_migrated)
+add_custom_target (run0 cd ${CMAKE_SOURCE_DIR}/02_sycl_migrated/ && ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/02_sycl_migrated gpumethod=0)
+add_custom_target (run1 cd ${CMAKE_SOURCE_DIR}/02_sycl_migrated/ && ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/02_sycl_migrated gpumethod=1)

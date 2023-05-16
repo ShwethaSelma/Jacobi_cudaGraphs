@@ -98,9 +98,11 @@ static void JacobiMethod(const float *A, const double *b,
     
     rowThreadSum = sycl::reduce_over_group(tile32, rowThreadSum, sycl::plus<double>());
 
-    if (item_ct1.get_sub_group().get_local_linear_id() == 0) {
-      dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(
-          &b_shared[i % (ROWS_PER_CTA + 1)], -rowThreadSum);
+    if (tile32.get_local_linear_id() == 0) {
+       sycl::atomic_ref<double, sycl::memory_order::relaxed, sycl::memory_scope::device,
+                  sycl:: access::address_space::generic_space>
+        at_h_sum{b_shared[i % (ROWS_PER_CTA + 1)]};
+        at_h_sum -= rowThreadSum;
     }
   }
 
@@ -108,7 +110,7 @@ static void JacobiMethod(const float *A, const double *b,
 
   if (item_ct1.get_local_id(2) < ROWS_PER_CTA) {
     dpct::experimental::logical_group tile8 = dpct::experimental::logical_group(
-        item_ct1, item_ct1.get_group(), ROWS_PER_CTA);
+        item_ct1, cta, ROWS_PER_CTA);
 
     double temp_sum = 0.0;
 
@@ -131,8 +133,10 @@ static void JacobiMethod(const float *A, const double *b,
     }
 
     if (tile32.get_local_linear_id() == 0) {
-      dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(
-          sum, temp_sum);
+             sycl::atomic_ref<double, sycl::memory_order::relaxed, sycl::memory_scope::device,
+                  sycl::access::address_space::generic_space>
+       at_sum{*sum};
+       at_sum += temp_sum;
     }
   }
 }
@@ -141,7 +145,6 @@ static void JacobiMethod(const float *A, const double *b,
 static void finalError(double *x, double *g_sum,
                        const sycl::nd_item<3> &item_ct1, uint8_t *dpct_local) {
   // Handle to thread block group
-  auto cta = item_ct1.get_group();
   auto warpSum = (double *)dpct_local;
   double sum = 0.0;
 
@@ -158,7 +161,7 @@ static void finalError(double *x, double *g_sum,
 
   sum = sycl::reduce_over_group(tile32, sum, sycl::plus<double>());
 
-  if (item_ct1.get_sub_group().get_local_linear_id() == 0) {
+  if (tile32.get_local_linear_id() == 0) {
     warpSum[item_ct1.get_local_id(2) /
             item_ct1.get_sub_group().get_local_range().get(0)] = sum;
   }
@@ -168,7 +171,7 @@ static void finalError(double *x, double *g_sum,
   double blockSum = 0.0;
   if (item_ct1.get_local_id(2) <
       (item_ct1.get_local_range(2) /
-       item_ct1.get_sub_group().get_local_range().get(0))) {
+       tile32.get_local_range().get(0))) {
     blockSum = warpSum[item_ct1.get_local_id(2)];
   }
 
@@ -176,9 +179,10 @@ static void finalError(double *x, double *g_sum,
 
     blockSum = sycl::reduce_over_group(tile32, blockSum, sycl::plus<double>());
 
-    if (item_ct1.get_sub_group().get_local_linear_id() == 0) {
-      dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(
-          g_sum, blockSum);
+    if (tile32.get_local_linear_id() == 0) {
+       sycl::atomic_ref<double, sycl::memory_order::relaxed, sycl::memory_scope::device, sycl::access::address_space::generic_space>
+        at_g_sum{*g_sum};
+        at_g_sum += blockSum;
     }
   }
 }
@@ -220,13 +224,13 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
                            x_shared_acc_ct1.get_pointer(),
                            b_shared_acc_ct1.get_pointer());
                                     });
-                        }).name("jacobiMethod_kernel0");
+                        }).name("jacobi_kernel");
 
   tf::syclTask sum_d2h = sf.memcpy(&sum, d_sum, sizeof(double)).name("sum_d2h");
   q.wait();
 
   jM_kernel.succeed(dsum_memset).precede(sum_d2h);
-  }, q).name("syclDeviceTasks");
+  }, q).name("syclTasks");
   
   for (k = 0; k < max_iter; k++) {
 
@@ -266,8 +270,8 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
         });
       }
       q.memcpy(&sum, d_sum, sizeof(double)).wait();
-      printf("GPU iterations : %d\n", k + 1);
-      printf("GPU error : %.3e\n", sum);
+      printf("Device iterations : %d\n", k + 1);
+      printf("Device error : %.3e\n", sum);
       break;
     }
   }
@@ -364,8 +368,8 @@ double JacobiMethodGpu(const float *A, const double *b,
       }
 
       q.memcpy(&sum, d_sum, sizeof(double)).wait();
-      printf("GPU iterations : %d\n", k + 1);
-      printf("GPU error : %.3e\n", sum);
+      printf("Device iterations : %d\n", k + 1);
+      printf("Device error : %.3e\n", sum);
       break;
     }
   }

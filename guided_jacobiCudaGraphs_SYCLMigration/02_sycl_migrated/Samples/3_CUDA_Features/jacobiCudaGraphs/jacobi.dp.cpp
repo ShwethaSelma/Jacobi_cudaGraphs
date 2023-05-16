@@ -111,7 +111,7 @@ static void JacobiMethod(const float *A, const double *b,
 
   if (item_ct1.get_local_id(2) < ROWS_PER_CTA) {
     dpct::experimental::logical_group tile8 = dpct::experimental::logical_group(
-        item_ct1, item_ct1.get_group(), ROWS_PER_CTA);
+        item_ct1, cta, ROWS_PER_CTA);
     double temp_sum = 0.0;
 
     int k = item_ct1.get_local_id(2);
@@ -143,7 +143,6 @@ static void JacobiMethod(const float *A, const double *b,
 static void finalError(double *x, double *g_sum,
                        const sycl::nd_item<3> &item_ct1, uint8_t *dpct_local) {
   // Handle to thread block group
-  auto cta = item_ct1.get_group();
   auto warpSum = (double *)dpct_local;
   double sum = 0.0;
 
@@ -226,13 +225,13 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
                            x_shared_acc_ct1.get_pointer(),
                            b_shared_acc_ct1.get_pointer());
 				    });
-			}).name("jacobiMethod_kernel0");
+			}).name("jacobi_kernel");
   
   tf::syclTask sum_d2h = sf.memcpy(&sum, d_sum, sizeof(double)).name("sum_d2h");
   q.wait();
   
   jM_kernel.succeed(dsum_memset).precede(sum_d2h);
-  }, q).name("syclDeviceTasks");
+  }, q).name("syclTasks");
 
   for (k = 0; k < max_iter; k++) {
     
@@ -272,8 +271,8 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
         });
       }
       q.memcpy(&sum, d_sum, sizeof(double)).wait();
-      printf("GPU iterations : %d\n", k + 1);
-      printf("GPU error : %.3e\n", sum);
+      printf("Device iterations : %d\n", k + 1);
+      printf("Device error : %.3e\n", sum);
       break;
     }
   }
@@ -370,8 +369,8 @@ double JacobiMethodGpu(const float *A, const double *b,
 
       q.memcpy(&sum, d_sum, sizeof(double));
       q.wait();
-      printf("GPU iterations : %d\n", k + 1);
-      printf("GPU error : %.3e\n", sum);
+      printf("Device iterations : %d\n", k + 1);
+      printf("Device error : %.3e\n", sum);
       break;
     }
   }

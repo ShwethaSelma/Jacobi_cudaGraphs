@@ -171,7 +171,7 @@ int main(int argc, char **argv) {
     sumGPU = JacobiMethodGpu(d_A, d_b, conv_threshold, max_iter, d_x, d_x_new, q);
   }
   sdkStopTimer(&timerGpu);
-  printf("GPU Processing time: %f (ms)\n", sdkGetTimerValue(&timerGpu));
+  printf("Device Processing time: %f (ms)\n", sdkGetTimerValue(&timerGpu));
 
   sycl::free(d_b, q);
   sycl::free(d_A, q);

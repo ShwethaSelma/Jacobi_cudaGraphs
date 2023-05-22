@@ -101,7 +101,7 @@ The following warnings in the "DPCT1XXX" format are gentereated by the tool to i
     ```
     The first line construct a taskflow graph which is then executed by an executor. 
    
-2. CT1007: Migration of cudaGraphAddMemcpyNode is not supported.
+2.	DPCT1007: Migration of cudaGraphAddMemcpyNode is not supported.
     ```
     cudaGraphAddMemcpyNode(&memcpyNode, graph, NULL, 0, &memcpyParams));
     ```

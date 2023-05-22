@@ -100,105 +100,102 @@ The following warnings in the "DPCT1XXX" format are gentereated by the tool to i
     tf::Executor exe;
     ```
     The first line construct a taskflow graph which is then executed by an executor. 
-   
-2.	DPCT1007: Migration of cudaGraphAddMemcpyNode is not supported.
+
+2.  DPCT1007: Migration of cudaGraphAddMemsetNode is not supported.
     ```
-    cudaGraphAddMemcpyNode(&memcpyNode, graph, NULL, 0, &memcpyParams));
+    cudaGraphAddMemsetNode(&memsetNode, graph, NULL, 0, &memsetParams);
     ```
-    The tf::syclFlow provides memcpy method to creates a memcpy task that copies untyped data in bytes.
+    The tf::syclFlow::memset method creates a memset task that fills untyped data with a specified byte value. 
     ```
-    tf::syclTask inputVec_h2d = sf.memcpy(inputVec_d, inputVec_h, sizeof(float) * inputSize) .name("inputVec_h2d");
-    ```  
-5.	DPCT1007: Migration of cudaGraphAddMemsetNode is not supported.
-    ```
-    cudaGraphAddMemsetNode(&memsetNode, graph, NULL, 0, &memsetParams));
-    ```
-    The tf::syclFlow::memset method creates a memset task that fills untyped data with a byte value. 
-    ```
-     tf::syclTask outputVec_memset = sf.memset(outputVec_d, 0, numOfBlocks * sizeof(double)) .name("outputVecd_memset");
+     tf::syclTask dsum_memset = sf.memset(d_sum, 0, sizeof(double)) .name("dsum_memset");
     ```
     For more information on memory operations refer [here](https://github.com/taskflow/taskflow/blob/master/taskflow/sycl/syclflow.hpp).
 
-6.	DPCT1007: Migration of cudaGraphAddKernelNode is not supported.
+3.  DPCT1007: Migration of cudaGraphAddKernelNode is not supported.
     ```
-    cudaGraphAddKernelNode(&kernelNode, graph, nodeDependencies.data(),
-                             nodeDependencies.size(), &kernelNodeParams));
+     cudaGraphAddKernelNode(&jacobiKernelNode, graph, nodeDependencies.data(),
+                             nodeDependencies.size(), &NodeParams0);
     ```
     The tf::syclFlow::on creates a task to launch the given command group function object and tf::syclFlow::parallel_for creates a kernel task from a parallel_for method through the handler object associated with a command group. The SYCL runtime schedules command group function objects from out-of-order queue and constructs a task graph based on submitted events.
     ```
-    tf::syclTask reduce_kernel = sf.on([=] (sycl::handler& cgh){
-      sycl::local_accessor<double, 1> tmp(sycl::range<1>(THREADS_PER_BLOCK), cgh);
-      cgh.parallel_for(sycl::nd_range<3>{sycl::range<3>(1, 1, numOfBlocks) *
-                                sycl::range<3>(1, 1, THREADS_PER_BLOCK), sycl::range<3>(1, 1, THREADS_PER_BLOCK)}, [=](sycl::nd_item<3> item_ct1)[[intel::reqd_sub_group_size(SUB_GRP_SIZE)]]
-                      {
-                        reduce(inputVec_d, outputVec_d, inputSize, numOfBlocks, item_ct1, tmp.get_pointer());
-                      });
-        }).name("reduce_kernel");
+    tf::syclTask jM_kernel =
+                    sf.on([=](sycl::handler &cgh) {
+                         sycl::local_accessor<double, 1> x_shared_acc_ct1(
+            		     sycl::range<1>(N_ROWS), cgh);
+
+        	    sycl::local_accessor<double, 1> b_shared_acc_ct1(
+           		sycl::range<1>(ROWS_PER_CTA + 1), cgh);
+                        cgh.parallel_for(
+                            sycl::nd_range<3>(nblocks * nthreads, nthreads),
+                            [=](sycl::nd_item<3> item_ct1)
+                                [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
+                                    JacobiMethod(A, b, conv_threshold, params[k % 2], params[(k + 1) % 2], d_sum, item_ct1,
+                           x_shared_acc_ct1.get_pointer(),
+                           b_shared_acc_ct1.get_pointer());
+				    });
+			}).name("jacobi_kernel");
     ```
-7.	DPCT1007: Migration of cudaGraphAddHostNode is not supported.
+
+4.	DPCT1007: Migration of cudaGraphAddMemcpyNode is not supported.
     ```
-    cudaGraphAddHostNode(&hostNode, graph, nodeDependencies.data(),   nodeDependencies.size(), &hostParams));
+    cudaGraphAddMemcpyNode(&memcpyNode, graph, nodeDependencies.data(),
+                             nodeDependencies.size(), &memcpyParams);
     ```
-    The tf::syclFlow doesn’t have a host method to run the callable on the host, instead we can achieve this by creating a subflow graph since Taskflow supports dynamic tasking and runs the callable on the host.
+    The tf::syclFlow provides memcpy method to creates a memory copy task that copies untyped data in bytes.
     ```
-    tf::Task syclHostTask = tflow.emplace([&](){
-      myHostNodeCallback(&hostFnData);
-    }).name("syclHostTask");
-    syclHostTask.succeed(syclKernelTask);   
+    tf::syclTask sum_d2h = sf.memcpy(&sum, d_sum, sizeof(double)).name("sum_d2h");
+    ```  
+
+5.	DPCT1007: Migration of cudaGraphInstantiate is not supported.
     ```
-    The task dependencies are established through precede or succeed, here syclHostTask runs after syclKernelTask.
-   
-8.	DPCT1007: Migration of cudaGraphGetNodes is not supported.
-    ```
-    cudaGraphGetNodes(graph, nodes, &numNodes));
-    ```
-    CUDA graph nodes are equivalent to SYCL tasks, both tf::Taskflow and tf::syclFlow class include num_tasks() function to query the total number of tasks.
-    ```
-    sf_Task = sf.num_tasks();
-    ```
-9.	DPCT1007: Migration of cudaGraphInstantiate is not supported.
-    ```
-    cudaGraphInstantiate(&graphExec, graph, NULL, NULL, 0));
+    cudaGraphInstantiate(&graphExec, graph, NULL, NULL, 0);
     ```
     SYCL Task graph doesn’t need to be instantiated before executing but need to establish the task dependencies using precede and succeed.
     ```
-    reduce_kernel.succeed(inputVec_h2d, outputVec_memset).precede(reduceFinal_kernel);
-    reduceFinal_kernel.succeed(resultd_memset).precede(result_d2h);
+    jM_kernel.succeed(dsum_memset).precede(sum_d2h);
     ```
-    The inputVec_h2d and outputVec_memset tasks run parallelly followed by reduce_kernel task.
+    The jM_kernel will be executed after dsum_memset execution and jM_kernel executes before sum_d2h execution.
+	
+6.	DPCT1007: Migration of cudaGraphExecKernelNodeSetParams is not supported.
+    ```
+    cudaGraphExecKernelNodeSetParams(
+        graphExec, jacobiKernelNode,
+        ((k & 1) == 0) ? &NodeParams0 : &NodeParams1);
+    ```
+    The tf::syclFlow doesn’t have a equivalent method to cudaGraphExecKernelNodeSetParams method to set the arguments of the kernel conditionally, instead we can achieve this by simple logic by array of arguments and choosing it conditionally.
+    ```
+    double *params[] = {x, x_new};
+
+    cgh.parallel_for(
+                            sycl::nd_range<3>(nblocks * nthreads, nthreads),
+                            [=](sycl::nd_item<3> item_ct1)
+                                [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
+                                    JacobiMethod(A, b, conv_threshold, params[k % 2], params[(k + 1) % 2], d_sum, item_ct1,
+                           x_shared_acc_ct1.get_pointer(),
+                           b_shared_acc_ct1.get_pointer());
+				    });
+      
+    ```
    
-10. DPCT1007: Migration of cudaGraphClone is not supported.
+7.  DPCT1007: Migration of cudaGraphLaunch is not supported.
     ```
-    cudaGraphClone(&clonedGraph, graph));
+    cudaGraphLaunch(graphExec, stream);
     ```
-    In SYCL, there is no clone function available as Taskflow graph objects are move-only. To achieve functionality, we can use std::move() function as shown below.
+    A taskflow graph can be run once or multiple times through an executor using run() method.
     ```
-    tf::Taskflow tflow_clone(std::move(tflow));
-    ```
-    This will construct a taskflow tflow_clone from moved taskflow tflow, and taskflow tflow becomes empty. For more information refer [here](https://taskflow.github.io/taskflow/classtf_1_1Taskflow.html#afd790de6db6d16ddf4729967c1edebb5). 
-    
-11. DPCT1007: Migration of cudaGraphLaunch is not supported.
-    ```
-    for (int i = 0; i < GRAPH_LAUNCH_ITERATIONS; i++) {
-      cudaGraphLaunch(graphExec, streamForGraph);
-    }
-    ```
-    A taskflow graph can be run once or multiple times using an executor. run_n() will run the taskflow the number of times specified by the second argument.
-    ```
-    exe.run_n(tflow, GRAPH_LAUNCH_ITERATIONS).wait();
+    exe.run(tflow).wait();
     ```   
-12. DPCT1007: Migration of cudaGraphExecDestroy is not supported.
-    DPCT1007: Migration of cudaGraphDestroy is not supported.
+    To ensure that all the taskflow submissions are completed before calling destructor, we must use wait() during the execution.
+
+8.  DPCT1007: Migration of cudaGraphExecDestroy is not supported.
     ```
     cudaGraphExecDestroy(graphExec);
-    cudaGraphDestroy(graph);
     ```
     tf::Taskflow class has default destructor operators for both tf::executor and tf::taskflow objects created.
     ```
     ~Executor() 
-    ~Taskflow()
     ```
-    To ensure that all the taskflow submissions are completed before calling destructor, we must use wait() during the execution.
+9.  
 
 > **Note**: The SYCL Task Graph Programming Model, syclFlow, leverages the out-of-order property of the SYCL queue to design a simple and efficient scheduling algorithm using topological sort. SYCL can be slower than CUDA graphs because of execution overheads.
 

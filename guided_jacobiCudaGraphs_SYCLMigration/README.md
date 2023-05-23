@@ -156,8 +156,11 @@ The following warnings in the "DPCT1XXX" format are gentereated by the tool to i
     ```
     The jM_kernel will be executed after dsum_memset execution and jM_kernel executes before sum_d2h execution.
 	
-6.	DPCT1007: Migration of cudaGraphExecKernelNodeSetParams is not supported.
+6.  DPCT1082: Migration of cudaKernelNodeParams type is not supported.
+    DPCT1007: Migration of cudaGraphExecKernelNodeSetParams is not supported.
     ```
+    cudaKernelNodeParams NodeParams0, NodeParams1;
+
     cudaGraphExecKernelNodeSetParams(
         graphExec, jacobiKernelNode,
         ((k & 1) == 0) ? &NodeParams0 : &NodeParams1);
@@ -195,9 +198,44 @@ The following warnings in the "DPCT1XXX" format are gentereated by the tool to i
     ```
     ~Executor() 
     ```
-9.  
-
 > **Note**: The SYCL Task Graph Programming Model, syclFlow, leverages the out-of-order property of the SYCL queue to design a simple and efficient scheduling algorithm using topological sort. SYCL can be slower than CUDA graphs because of execution overheads.
+
+### Optimizations
+
+Once the CUDA code is migrated to SYCL successfully and functionality is achieved, we can optimize the code by using profiling tools which helps in identifying the hotspots such as operations/instructions taking longer time to execute, memory utilization etc. 
+
+1.	Reduction operation optimization 
+    ```
+    for (int offset = item_ct1.get_sub_group().get_local_linear_range() / 2;
+         offset > 0; offset /= 2) {
+      rowThreadSum += tile32.shuffle_down(rowThreadSum, offset);
+    }
+    ```
+    The sub-group function `shuffle_down` works by exchanging values between work-items in the sub-group via a shift. But needs to be looped to iterate among the sub-groups. 
+    ```
+    rowThreadSum = sycl::reduce_over_group(tile32, rowThreadSum, sycl::plus<double>());
+    ```
+    The migrated code snippet with `shuffle_down` API can be replaced with `reduce_over_group` to get better performance. The reduce_over_group implements the generalized sum of the array elements internally by combining values held directly by the work-items in a group. The work-group reduces a number of values equal to the size of the group and each work-item provides one value.
+
+2.	Atomic operation optimization
+    ```
+     if (item_ct1.get_sub_group().get_local_linear_id() == 0) {
+      dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(
+          &b_shared[i % (ROWS_PER_CTA + 1)], -rowThreadSum);
+    }
+    ```
+    The `atomic_fetch_add` operation calls automatically add on SYCL atomic object. Here, the atomic_fetch_add is used to sum all the subgroup values into rowThreadSum variable. This can be optimized by replacing the atomic_fetch_add with atomic_ref from sycl namespace.
+    ```
+    if (tile32.get_local_linear_id() == 0) {
+       sycl::atomic_ref<double, sycl::memory_order::relaxed, sycl::memory_scope::device,
+                  sycl:: access::address_space::generic_space>
+        at_h_sum{b_shared[i % (ROWS_PER_CTA + 1)]};
+        at_h_sum -= rowThreadSum;
+    }
+    ```
+    The `sycl::atomic_ref`, references to value of the object to be added. The result is then assigned to the value of the referenced object.
+
+These optimization changes are performed in JacobiMethod and FinalError Kernels which can be found in `03_sycl_migrated_optimized` folder.
 
 ### On Linux*
 

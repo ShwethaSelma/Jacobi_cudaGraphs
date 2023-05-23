@@ -41,7 +41,7 @@ This sample is migrated from NVIDIA CUDA sample. See the [JacobiCudaGraphs](http
 |:---                        |:---
 | OS                         | Ubuntu* 20.04
 | Hardware                   | Intel® Gen9, Gen11 and Xeon CPU
-| Software                   | SYCLomatic version 2023.0, Intel oneAPI Base Toolkit version 2023.0
+| Software                   | SYCLomatic version 2023.1, Intel oneAPI Base Toolkit version 2023.1
 
 For more information on how to use Syclomatic Tool, visit [Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html#gs.vmhplg).
 

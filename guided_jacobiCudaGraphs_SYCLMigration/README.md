@@ -81,9 +81,9 @@ For this sample, the SYCLomatic Tool automatically migrates ~80% of the CUDA run
    intercept-build make
    ```
 4. The above step creates a JSON file named compile_commands.json with all the compiler invocations and stores the names of the input files and the compiler options.
-5. Pass the JSON file as input to the SYCLomatic Tool. The result is written to a folder named dpct_output. The --in-root specifies path to the root of the source tree to be migrated. The --use-custom-helper option will make a copy of dpct header files/functions used in migrated code into the dpct_output folder as `include` folder
+5. Pass the JSON file as input to the SYCLomatic Tool. The result is written to a folder named dpct_output. The `--in-root` specifies path to the root of the source tree to be migrated. The `--use-custom-helper` option will make a copy of dpct header files/functions used in migrated code into the dpct_output folder as `include` folder. The `--use-experimental-features` option specifies experimental helper function used to logically group work-items.
    ```
-   c2s -p compile_commands.json --in-root ../../.. --use-custom-helper=api
+   c2s -p compile_commands.json --in-root ../../.. --use-custom-helper=api --use-experimental-features=logical-group
    ```
    
 ### Manual workarounds 

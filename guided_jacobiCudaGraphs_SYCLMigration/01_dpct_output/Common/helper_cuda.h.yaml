@@ -1,7 +1,7 @@
 ---
-MainSourceFile:  '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/dpct_output/Common/helper_cuda.h'
+MainSourceFile:  '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/dpct_output/Common/helper_cuda.h'
 Replacements:
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          1793
     Length:          0
     ReplacementText: "#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
@@ -10,7 +10,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          2210
     Length:          18
     ReplacementText: __DPCT_HPP__
@@ -19,7 +19,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          2266
     Length:          11
     ReplacementText: 'dpct::err0'
@@ -28,16 +28,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          2287
     Length:          0
-    ReplacementText: "  /*\n  DPCT1009:18: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.\n  */\n"
+    ReplacementText: "  /*\n  DPCT1009:16: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.\n  */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          2296
     Length:          23
     ReplacementText: '"cudaGetErrorName is not supported"/*cudaGetErrorName(error)*/'
@@ -46,7 +46,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7109
     Length:          14
     ReplacementText: int
@@ -55,7 +55,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7161
     Length:          21
     ReplacementText: '0'
@@ -64,7 +64,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7232
     Length:          30
     ReplacementText: '100'
@@ -73,7 +73,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7321
     Length:          29
     ReplacementText: '101'
@@ -82,7 +82,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7408
     Length:          31
     ReplacementText: '102'
@@ -91,7 +91,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7499
     Length:          24
     ReplacementText: '103'
@@ -100,7 +100,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7576
     Length:          26
     ReplacementText: '104'
@@ -109,7 +109,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7657
     Length:          33
     ReplacementText: '105'
@@ -118,7 +118,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7752
     Length:          39
     ReplacementText: '106'
@@ -127,7 +127,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7859
     Length:          28
     ReplacementText: '201'
@@ -136,7 +136,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          7944
     Length:          33
     ReplacementText: '202'
@@ -145,7 +145,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          8039
     Length:          35
     ReplacementText: '203'
@@ -154,7 +154,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          8138
     Length:          27
     ReplacementText: '204'
@@ -163,7 +163,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          8221
     Length:          28
     ReplacementText: '999'
@@ -172,7 +172,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          15785
     Length:          199
     ReplacementText: ''
@@ -181,7 +181,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          15995
     Length:          18
     ReplacementText: __DPCT_HPP__
@@ -190,16 +190,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          16461
     Length:          0
-    ReplacementText: "  /*\n  DPCT1010:19: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.\n  */\n"
+    ReplacementText: "  /*\n  DPCT1010:17: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.\n  */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          16463
     Length:          11
     ReplacementText: 'dpct::err0'
@@ -208,7 +208,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          16481
     Length:          18
     ReplacementText: '0'
@@ -217,7 +217,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          16504
     Length:          259
     ReplacementText: ''
@@ -226,16 +226,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          17099
     Length:          0
-    ReplacementText: "  /*\n  DPCT1010:21: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.\n  */\n"
+    ReplacementText: "  /*\n  DPCT1010:19: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.\n  */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          17101
     Length:          11
     ReplacementText: 'dpct::err0'
@@ -244,7 +244,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          17119
     Length:          18
     ReplacementText: '0'
@@ -253,7 +253,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          17142
     Length:          235
     ReplacementText: ''
@@ -262,25 +262,25 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          17829
     Length:          0
-    ReplacementText: ' dpct_type_127362'
+    ReplacementText: ' dpct_type_966251'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          19036
     Length:          0
-    ReplacementText: ' dpct_type_765884'
+    ReplacementText: ' dpct_type_651955'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          20194
     Length:          18
     ReplacementText: __DPCT_HPP__
@@ -289,16 +289,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          20313
     Length:          0
-    ReplacementText: "  /*\n  DPCT1003:23: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n  */\n"
+    ReplacementText: "  /*\n  DPCT1003:21: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n  */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          20331
     Length:          33
     ReplacementText: '(device_count = dpct::dev_mgr::instance().device_count(), 0)'
@@ -307,16 +307,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          20960
     Length:          0
-    ReplacementText: "  /*\n  DPCT1035:24: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n  */\n"
+    ReplacementText: "  /*\n  DPCT1035:22: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n  */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          20978
     Length:          67
     ReplacementText: '(computeMode = 1, 0)'
@@ -325,7 +325,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          21066
     Length:          72
     ReplacementText: '(major = dpct::dev_mgr::instance().get_device(devID).get_major_version(), 0)'
@@ -334,7 +334,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          21159
     Length:          72
     ReplacementText: '(minor = dpct::dev_mgr::instance().get_device(devID).get_minor_version(), 0)'
@@ -343,16 +343,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          21234
     Length:          0
-    ReplacementText: "  /*\n  DPCT1035:25: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n  */\n"
+    ReplacementText: "  /*\n  DPCT1035:23: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n  */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          21255
     Length:          25
     ReplacementText: '0'
@@ -361,16 +361,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          21573
     Length:          0
-    ReplacementText: "  /*\n  DPCT1093:26: The \"devID\" device may be not the one intended for use. Adjust the selected device if needed.\n  */\n  /*\n  DPCT1003:27: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n  */\n"
+    ReplacementText: "  /*\n  DPCT1093:24: The \"devID\" device may be not the one intended for use. Adjust the selected device if needed.\n  */\n  /*\n  DPCT1003:25: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n  */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          21591
     Length:          13
     ReplacementText: '(dpct::select_device'
@@ -379,7 +379,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          21611
     Length:          0
     ReplacementText: ', 0)'
@@ -388,7 +388,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          21830
     Length:          0
     ReplacementText: ' try '
@@ -397,16 +397,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          21995
     Length:          0
-    ReplacementText: "  /*\n  DPCT1003:28: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n  */\n"
+    ReplacementText: "  /*\n  DPCT1003:26: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n  */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          22013
     Length:          33
     ReplacementText: '(device_count = dpct::dev_mgr::instance().device_count(), 0)'
@@ -415,16 +415,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          22381
     Length:          0
-    ReplacementText: "    /*\n    DPCT1035:29: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n    */\n"
+    ReplacementText: "    /*\n    DPCT1035:27: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          22401
     Length:          76
     ReplacementText: '(computeMode = 1, 0)'
@@ -433,7 +433,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          22500
     Length:          81
     ReplacementText: '(major = dpct::dev_mgr::instance().get_device(current_device).get_major_version(), 0)'
@@ -442,7 +442,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          22604
     Length:          81
     ReplacementText: '(minor = dpct::dev_mgr::instance().get_device(current_device).get_minor_version(), 0)'
@@ -451,16 +451,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          22789
     Length:          0
-    ReplacementText: "    /*\n    DPCT1035:30: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n    */\n"
+    ReplacementText: "    /*\n    DPCT1035:28: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          22812
     Length:          25
     ReplacementText: '0'
@@ -469,7 +469,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          23085
     Length:          92
     ReplacementText: '(multiProcessorCount = dpct::dev_mgr::instance().get_device(current_device).get_max_compute_units(), 0)'
@@ -478,7 +478,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          23186
     Length:          11
     ReplacementText: 'dpct::err0'
@@ -487,7 +487,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          23207
     Length:          72
     ReplacementText: '(clockRate = dpct::dev_mgr::instance().get_device(current_device).get_max_clock_frequency(), 0)'
@@ -496,7 +496,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          23287
     Length:          473
     ReplacementText: ''
@@ -505,7 +505,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          24298
     Length:          0
     ReplacementText: "\ncatch (sycl::exception const &exc) {\n  std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n  std::exit(1);\n}"
@@ -514,16 +514,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          24947
     Length:          0
-    ReplacementText: "    /*\n    DPCT1093:31: The \"devID\" device may be not the one intended for use. Adjust the selected device if needed.\n    */\n    /*\n    DPCT1003:32: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n    */\n"
+    ReplacementText: "    /*\n    DPCT1093:29: The \"devID\" device may be not the one intended for use. Adjust the selected device if needed.\n    */\n    /*\n    DPCT1003:30: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          24967
     Length:          13
     ReplacementText: '(dpct::select_device'
@@ -532,7 +532,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          24987
     Length:          0
     ReplacementText: ', 0)'
@@ -541,7 +541,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          25040
     Length:          72
     ReplacementText: '(major = dpct::dev_mgr::instance().get_device(devID).get_major_version(), 0)'
@@ -550,7 +550,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          25135
     Length:          72
     ReplacementText: '(minor = dpct::dev_mgr::instance().get_device(devID).get_minor_version(), 0)'
@@ -559,16 +559,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          25490
     Length:          0
-    ReplacementText: "  /*\n  DPCT1003:33: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n  */\n"
+    ReplacementText: "  /*\n  DPCT1003:31: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n  */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          25508
     Length:          33
     ReplacementText: '(device_count = dpct::dev_mgr::instance().device_count(), 0)'
@@ -577,16 +577,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          25806
     Length:          0
-    ReplacementText: "    /*\n    DPCT1035:34: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n    */\n"
+    ReplacementText: "    /*\n    DPCT1035:32: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          25826
     Length:          76
     ReplacementText: '(computeMode = 1, 0)'
@@ -595,7 +595,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          25925
     Length:          74
     ReplacementText: '(integrated = dpct::dev_mgr::instance().get_device(current_device).get_integrated(), 0)'
@@ -604,16 +604,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          26119
     Length:          0
-    ReplacementText: "    /*\n    DPCT1035:35: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n    */\n"
+    ReplacementText: "    /*\n    DPCT1035:33: All SYCL devices can be used by the host to submit tasks. You may need to adjust this code.\n    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          26157
     Length:          25
     ReplacementText: '0'
@@ -622,16 +622,16 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          26187
     Length:          0
-    ReplacementText: "      /*\n      DPCT1093:36: The \"current_device\" device may be not the one intended for use. Adjust the selected device if needed.\n      */\n      /*\n      DPCT1003:37: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n      */\n"
+    ReplacementText: "      /*\n      DPCT1093:34: The \"current_device\" device may be not the one intended for use. Adjust the selected device if needed.\n      */\n      /*\n      DPCT1003:35: Migrated API does not return error code. (*, 0) is inserted. You may need to rewrite this code.\n      */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          26209
     Length:          13
     ReplacementText: '(dpct::select_device'
@@ -640,7 +640,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          26238
     Length:          0
     ReplacementText: ', 0)'
@@ -649,7 +649,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          26296
     Length:          81
     ReplacementText: '(major = dpct::dev_mgr::instance().get_device(current_device).get_major_version(), 0)'
@@ -658,7 +658,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          26402
     Length:          81
     ReplacementText: '(minor = dpct::dev_mgr::instance().get_device(current_device).get_minor_version(), 0)'
@@ -667,7 +667,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          27117
     Length:          19
     ReplacementText: 'dev = dpct::dev_mgr::instance().current_device_id()'
@@ -676,7 +676,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          27157
     Length:          70
     ReplacementText: '(major = dpct::dev_mgr::instance().get_device(dev).get_major_version(), 0)'
@@ -685,7 +685,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - FilePath:        '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Offset:          27248
     Length:          70
     ReplacementText: '(minor = dpct::dev_mgr::instance().get_device(dev).get_minor_version(), 0)'
@@ -695,7 +695,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
 MainSourceFilesDigest:
-  - MainSourceFile:  '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+  - MainSourceFile:  '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
     Digest:          b335aa967b6d80921de9d6528e1564a5
 DpctVersion:     17.0.0
 MainHelperFileName: dpct
@@ -705,7 +705,7 @@ FeatureMap:
     atomic_fetch_add:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
       SubFeatureMap:   {}
   device.hpp:
     dev_mgr:
@@ -714,17 +714,17 @@ FeatureMap:
         dev_mgr_current_device_id:
           IsCalled:        true
           CallerSrcFiles:
-            - '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
           SubFeatureMap:   {}
         dev_mgr_device_count:
           IsCalled:        true
           CallerSrcFiles:
-            - '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
           SubFeatureMap:   {}
         dev_mgr_get_device:
           IsCalled:        true
           CallerSrcFiles:
-            - '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
           SubFeatureMap:   {}
     device_ext:
       IsCalled:        false
@@ -732,65 +732,54 @@ FeatureMap:
         device_ext_create_queue:
           IsCalled:        true
           CallerSrcFiles:
-            - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
           SubFeatureMap:   {}
         device_ext_get_integrated:
           IsCalled:        true
           CallerSrcFiles:
-            - '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
           SubFeatureMap:   {}
         device_ext_get_major_version:
           IsCalled:        true
           CallerSrcFiles:
-            - '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
           SubFeatureMap:   {}
         device_ext_get_max_clock_frequency:
           IsCalled:        true
           CallerSrcFiles:
-            - '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
           SubFeatureMap:   {}
         device_ext_get_max_compute_units:
           IsCalled:        true
           CallerSrcFiles:
-            - '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
           SubFeatureMap:   {}
         device_ext_get_minor_version:
           IsCalled:        true
           CallerSrcFiles:
-            - '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
           SubFeatureMap:   {}
-    get_current_device:
-      IsCalled:        true
-      CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
-      SubFeatureMap:   {}
-    get_default_queue:
-      IsCalled:        true
-      CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
-      SubFeatureMap:   {}
     has_capability_or_fail:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
       SubFeatureMap:   {}
     select_device:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
       SubFeatureMap:   {}
     typedef_queue_ptr:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
       SubFeatureMap:   {}
   dpct.hpp:
     dpct_compatibility_temp:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
       SubFeatureMap:   {}
   image.hpp:
     image_matrix:
@@ -799,71 +788,86 @@ FeatureMap:
         image_matrix_to_pitched_data:
           IsCalled:        true
           CallerSrcFiles:
-            - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
           SubFeatureMap:   {}
   memory.hpp:
     async_dpct_memcpy:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
       SubFeatureMap:   {}
     async_dpct_memcpy_2d:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
       SubFeatureMap:   {}
     async_dpct_memcpy_3d:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
       SubFeatureMap:   {}
     async_dpct_memset:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
       SubFeatureMap:   {}
     async_dpct_memset_2d:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
       SubFeatureMap:   {}
     async_dpct_memset_3d:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
       SubFeatureMap:   {}
     memcpy_direction:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/main.cpp'
       SubFeatureMap:   {}
     pitched_data:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
       SubFeatureMap:   {}
   util.hpp:
     err_types:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Common/helper_cuda.h'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Common/helper_cuda.h'
       SubFeatureMap:   {}
+    logical_group:
+      IsCalled:        true
+      CallerSrcFiles:
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+      SubFeatureMap:
+        logical_group_get_local_linear_id:
+          IsCalled:        true
+          CallerSrcFiles:
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+          SubFeatureMap:   {}
+        logical_group_get_local_linear_range:
+          IsCalled:        true
+          CallerSrcFiles:
+            - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+          SubFeatureMap:   {}
     shift_sub_group_left:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
+        - '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs/jacobi.cu'
       SubFeatureMap:   {}
 CompileTargets:  {}
 OptionMap:
   AnalysisScopePath:
-    Value:           '/home/tcs/shwetha/cuda-samples'
+    Value:           '/home/tcs2/workspace_shwetha/cuda-samples'
     Specified:       false
   AsyncHandler:
     Value:           'false'
@@ -872,7 +876,7 @@ OptionMap:
     Value:           'false'
     Specified:       false
   CompilationsDir:
-    Value:           '/home/tcs/shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs'
+    Value:           '/home/tcs2/workspace_shwetha/cuda-samples/Samples/3_CUDA_Features/jacobiCudaGraphs'
     Specified:       true
   CtadEnabled:
     Value:           'false'
@@ -884,8 +888,8 @@ OptionMap:
     Value:           'false'
     Specified:       false
   ExperimentalFlag:
-    Value:           '0'
-    Specified:       false
+    Value:           '8'
+    Specified:       true
   ExplicitClNamespace:
     Value:           'false'
     Specified:       false

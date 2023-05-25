@@ -103,7 +103,7 @@ int main(int argc, char **argv) {
     }
   }
 
-  sycl::queue q{sycl::default_selector_v, sycl::property::queue::in_order()};
+  sycl::queue q{aspect_selector(sycl::aspect::fp64), sycl::property::queue::in_order()};
 
   std::cout << "\nRunning on "
             << q.get_device().get_info<sycl::info::device::name>() << "\n";

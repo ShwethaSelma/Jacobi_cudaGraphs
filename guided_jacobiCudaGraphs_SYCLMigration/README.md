@@ -82,6 +82,7 @@ The Jacobi CUDA Graphs computations happen inside a two- kernel Jacobi Method an
 In this sample, the vectors are loaded into shared memory for faster memory access and thread blocks are partitioned into tiles. Then, reduction of input data is performed in each of the partitioned tiles using sub-group primitives. These intermediate results are then added to a final sum variable via an atomic add operation. 
 
 The computation kernels are either scheduled using 2 alternative types of host function calls:
+
 •   Host function `JacobiMethodGpuCudaGraphExecKernelSetParams()`, which uses explicit CUDA Graph APIs 
 •   Host function `JacobiMethodGpu()`, which uses regular CUDA API's to launch kernels.
  

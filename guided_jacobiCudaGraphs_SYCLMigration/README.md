@@ -83,10 +83,8 @@ In this sample, the vectors are loaded into shared memory for faster memory acce
 
 The computation kernels are either scheduled using 2 alternative types of host function calls:
 
-•   Host function `JacobiMethodGpuCudaGraphExecKernelSetParams()`, which uses explicit CUDA Graph APIs
- 
-•   Host function `JacobiMethodGpu()`, which uses regular CUDA API's to launch kernels.
- 
+1.  Host function `JacobiMethodGpuCudaGraphExecKernelSetParams()`, which uses explicit CUDA Graph APIs 
+2.  Host function `JacobiMethodGpu()`, which uses regular CUDA API's to launch kernels.
 
 ## Build the `Jacobi CUDA Graphs` Sample for CPU and GPU
 

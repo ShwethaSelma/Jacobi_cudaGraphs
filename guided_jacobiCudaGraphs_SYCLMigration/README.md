@@ -1,6 +1,6 @@
 ﻿# `Jacobi CUDA Graphs` Sample
  
-The `Jacobi CUDA Graphs` sample demonstrates the number of iterations needed to solve system of Linear Equations using the Jacobi Iterative Method. The sample also demonstrates the migration of CUDA Graph explicit API calls to SYCL using Taskflow programming model which manages a task dependency graph. The sample is implemented using SYCL* by migrating code from original CUDA source code and offloading computations to a CPU, GPU, or accelerator.
+The `Jacobi CUDA Graphs` sample demonstrates the number of iterations needed to solve a system of Linear Equations using the Jacobi Iterative Method. The sample also demonstrates the migration of CUDA Graph explicit API calls to SYCL using Taskflow programming model which manages a task dependency graph. The sample is implemented using SYCL* by migrating code from original CUDA source code and offloading computations to a CPU, GPU, or accelerator.
 
 | Property                  | Description
 |:---                       |:---

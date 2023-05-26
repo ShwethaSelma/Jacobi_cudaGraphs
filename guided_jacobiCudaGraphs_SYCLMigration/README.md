@@ -1,6 +1,6 @@
-﻿# `Jacobi Cuda Graphs` Sample
+﻿# `Jacobi CUDA Graphs` Sample
  
-The `Jacobi Cuda Graphs` sample demonstrates the number of iterations needed to solve system of Linear Equations using Jacobi Iterative Method. The sample also demonstrates the migration of CUDA Graph explicit API calls to SYCL using Taskflow programming model which manages a task dependency graph. This sample is implemented using SYCL* by migrating code from original CUDA source code and offloading computations to a GPU/CPU.
+The `Jacobi CUDA Graphs` sample demonstrates the number of iterations needed to solve system of Linear Equations using the Jacobi Iterative Method. The sample also demonstrates the migration of CUDA Graph explicit API calls to SYCL using Taskflow programming model which manages a task dependency graph. The sample is implemented using SYCL* by migrating code from original CUDA source code and offloading computations to a CPU, GPU, or accelerator.
 
 | Property                  | Description
 |:---                       |:---
@@ -9,9 +9,18 @@ The `Jacobi Cuda Graphs` sample demonstrates the number of iterations needed to 
 
 ## Purpose
 
-The Jacobi method is used to find approximate numerical solutions for systems of linear equations of the form $Ax = b$ in numerical linear algebra, which is diagonally dominant. The parallel implementation demonstrates the use of CUDA Graph through explicit API calls and Stream Capture, also includes key SYCL concepts explained such as  Cooperative Groups, Shared Memory, Reduction operation, streams and Atomics. The sample shows the manual migration of explicit CUDA Graph API's such as cudaGraphCreate, cudaGraphAddMemcpyNode, cudaGraphLaunch etc, to SYCL equivalent API's using [Taskflow](https://github.com/taskflow/taskflow) programming Model.
+The Jacobi method is used to find approximate numerical solutions for systems of linear equations of the form $Ax = b$ in numerical linear algebra, which is diagonally dominant. 
+The parallel implementation demonstrates the use of CUDA Graph through explicit API calls and Stream Capture. It also covers explanations of key SYCL concepts, such as
 
-> **Note**: We use Intel® open-source SYCLomatic tool which assists developers in porting CUDA code automatically to SYCL code. To finish the process, developers complete the rest of the coding manually and then tune to the desired level of performance for the target architecture. User's can also use SYCLomatic Tool which comes along with the Intel® oneAPI Base Toolkit.
+- Cooperative groups
+- Shared Memory
+- Reduction operation
+- Streams 
+- Atomics
+
+ The sample illustrates the steps needed for manual migration of explicit CUDA Graph API's such as $cudaGraphCreate()$, $cudaGraphAddMemcpyNode()$, $cudaGraphLaunch()$ to SYCL equivalent API's using [Taskflow](https://github.com/taskflow/taskflow) programming Model.
+
+> **Note**: We use Intel's open-source SYCLomatic tool which assists developers in porting CUDA code automatically to SYCL code. To finish the process, developers complete the rest of the coding manually and then tune to the desired level of performance for the target architecture. Users can also use the Intel® DPC++ Compatibility Tool, available to augment the Intel® oneAPI Base Toolkit.
 
 This sample contains three versions in the following folders:
 
@@ -27,11 +36,24 @@ Refer [Workflow](https://www.intel.com/content/www/us/en/developer/tools/oneapi/
 
 ### CUDA source code evaluation
 
-The Jacobi Cuda Graphs sample uses Jacobi iterative algorithm to determines the number of iterations needed to solve system of Linear Equations. All computations happen inside a for-loop. There are two exit criteria from the loop, first is when we reach maximum number of iterations and second is when the final error falls below the desired tolerance. Each iteration has two parts:
-- Jacobi Method computation
-- Final Error computation
+The Jacobi CUDA Graphs sample uses Jacobi iterative algorithm to determines the number of iterations needed to solve system of Linear Equations. All computations happen inside a for-loop.
 
-In both `Jacobi Method` and `Final Error` Kernels reduction is performed to obtain the final error or sum value. The kernel uses cooperative groups, warp-level primitives, atomics and shared memory for the faster and frequent memory access to the block. These computation are loaded into kernel by host function which can be achieved through any one of the three methods. First host function is `JacobiMethodGpuCudaGraphExecKernelSetParams()` which uses explicit CUDA Graph APIs, second host function is `JacobiMethodGpuCudaGraphExecUpdate()` which uses CUDA stream capture APIs to launch and the third host function is `JacobiMethodGpu()` which uses regular CUDA API's to launch kernels. We only migrate the first and third host function using SYCLomatic Tool and manually migrating the unmigrated CUDA Graphs code section using [Taskflow](https://github.com/taskflow/taskflow) Programming Model. We do not migrate JacobiMethodGpuCudaGraphExecUpdate() because CUDA Stream Capture APIs are not yet supported in SYCL.
+There are two exit criteria from the loop:
+  1.  Execution reaches the maximum number of iterations 
+  2.  The final error falls below the desired tolerance.
+ 
+Each iteration has two parts:
+  - Jacobi Method computation
+  - Final Error computation
+
+In both `Jacobi Method` and `Final Error` Kernels reduction is performed to obtain the final error or sum value. 
+The kernel uses cooperative groups, warp-level primitives, atomics and shared memory for the faster and frequent memory access to the block. These computation are loaded into kernel by host function which can be achieved through any one of the three methods. 
+  1.  `JacobiMethodGpuCudaGraphExecKernelSetParams()`, which uses explicit CUDA Graph APIs
+  2.  `JacobiMethodGpuCudaGraphExecUpdate()`, which uses CUDA stream capture APIs to launch
+  3.  `JacobiMethodGpu()`, which uses regular CUDA API's to launch kernels. 
+  
+  We migrate the first and third host function using SYCLomatic. We then migrate the remaining CUDA Graphs code section using [Taskflow](https://github.com/taskflow/taskflow) Programming Model. 
+  We do not migrate `JacobiMethodGpuCudaGraphExecUpdate()`, because CUDA Stream Capture APIs are not yet supported in SYCL.
 
 This sample is migrated from NVIDIA CUDA sample. See the [JacobiCudaGraphs](https://github.com/NVIDIA/cuda-samples/tree/v11.8/Samples/3_CUDA_Features/jacobiCudaGraphs) sample in the NVIDIA/cuda-samples GitHub.
 
@@ -40,10 +62,10 @@ This sample is migrated from NVIDIA CUDA sample. See the [JacobiCudaGraphs](http
 | Optimized for              | Description
 |:---                        |:---
 | OS                         | Ubuntu* 20.04
-| Hardware                   | Intel® Gen9, Gen11 and Xeon CPU
-| Software                   | SYCLomatic version 2023.1, Intel oneAPI Base Toolkit version 2023.1
+| Hardware                   | Intel® Gen9, Gen11, and Xeon CPU
+| Software                   | SYCLomatic version 2023.1, Intel® oneAPI Base Toolkit version 2023.1
 
-For more information on how to use Syclomatic Tool, visit [Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html#gs.vmhplg).
+For more information on how to use Syclomatic, visit [Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html#gs.vmhplg).
 
 ## Key Implementation Details
 
@@ -56,9 +78,14 @@ This sample demonstrates the migration of the following prominent CUDA features:
 - Cooperative groups
 - Warp-level Primitives
 
-The JacobiCudaGraphs sample involves loading the vectors into shared memory for faster memory access and partitions thread blocks into tiles. Then, reduction of input data is performed in each of the partitioned tiles using sub-group primitives. These intermediate results are then added to a final sum variable via an atomic add operation. This also results in faster implementation, avoiding unnecessary block-level synchronizations. These kernels are scheduled through taskflow which develops a simple and powerful task programming model to enable efficient implementations of parallel and heterogeneous task programs. 
+The Jacobi CUDA Graphs computations happen inside a two- kernel Jacobi Method and Final Error Kernels., Element reduction is performed to obtain the final error or sum value. 
+In this sample, the vectors are loaded into shared memory for faster memory access and thread blocks are partitioned into tiles. Then, reduction of input data is performed in each of the partitioned tiles using sub-group primitives. These intermediate results are then added to a final sum variable via an atomic add operation. 
+The computation kernels are either scheduled using 2 alternative types of host function calls:
+•   Host function `JacobiMethodGpuCudaGraphExecKernelSetParams()`, which uses explicit CUDA Graph APIs 
+•   Host function `JacobiMethodGpu()`, which uses regular CUDA API's to launch kernels.
+ 
 
-## Build the `JacobiCudaGraphs` Sample for CPU and GPU
+## Build the `Jacobi CUDA Graphs` Sample for CPU and GPU
 
 > **Note**: If you have not already done so, set up your CLI
 > environment by sourcing  the `setvars` script in the root of your oneAPI installation.
@@ -88,7 +115,7 @@ For this sample, the SYCLomatic Tool automatically migrates ~80% of the CUDA run
    
 ### Manual workarounds 
 
-The following warnings in the "DPCT1XXX" format are gentereated by the tool to indicate the code not migrated by the tool and need to be manually modified in order to complete the migration. 
+The following warnings in the "DPCT1XXX" format are generated by the tool to indicate the code not migrated by the tool and need to be manually modified in order to complete the migration. 
 
 1.	DPCT1007: Migration of cudaGraphCreate is not supported. 
     ```
@@ -301,7 +328,6 @@ Device Processing time: 1094.285034 (ms)
 &&&& jacobiCudaGraphs PASSED
 Built target run_smo0
 ```
->**Note**: On Gen11 architecture double data types are not supported, hence change double data types to float data types and decrease threshold value i.e. conv_threshold variable by 2 powers of 10 since datatype is changed from double to float.
 
 ## License
 Code samples are licensed under the MIT license. See

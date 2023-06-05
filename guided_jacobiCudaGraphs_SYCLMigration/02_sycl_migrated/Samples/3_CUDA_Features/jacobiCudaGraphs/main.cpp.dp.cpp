@@ -43,13 +43,15 @@
 // of all ones.
 // The dimension N_ROWS is included in jacobi.h
 
-#include <sycl/sycl.hpp>
-#include <dpct/dpct.hpp>
 #include <helper_cuda.h>
 #include <helper_timer.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <dpct/dpct.hpp>
+#include <sycl/sycl.hpp>
+
 #include "jacobi.h"
 
 // Run the Jacobi method for A*x = b on GPU with CUDA Graph -
@@ -83,9 +85,10 @@ int main(int argc, char **argv) {
     printf("Command line: jacobiCudaGraphs [-option]\n");
     printf("Valid options:\n");
     printf(
-        "-gpumethod=<0 or 1>  : 0 - [Default] "       //<0,1 or 2> 
+        "-gpumethod=<0 or 1>  : 0 - [Default] "  //<0,1 or 2>
         "JacobiMethodGpuCudaGraphExecKernelSetParams\n");
-   // printf("                       : 1 - JacobiMethodGpuCudaGraphExecUpdate\n");
+    // printf("                       : 1 -
+    // JacobiMethodGpuCudaGraphExecUpdate\n");
     printf("                       : 1 - JacobiMethodGpu - Non CUDA Graph\n");
     printf("-device=device_num     : cuda device id");
     printf("-help         : Output a help message\n");
@@ -103,7 +106,8 @@ int main(int argc, char **argv) {
     }
   }
 
-  sycl::queue q{aspect_selector(sycl::aspect::fp64), sycl::property::queue::in_order()};
+  sycl::queue q{aspect_selector(sycl::aspect::fp64),
+                sycl::property::queue::in_order()};
 
   std::cout << "\nRunning on "
             << q.get_device().get_info<sycl::info::device::name>() << "\n";
@@ -141,14 +145,13 @@ int main(int argc, char **argv) {
   printf("CPU iterations : %d\n", cnt);
   printf("CPU error : %.3e\n", sum);
   printf("CPU Processing time: %f (ms)\n", sdkGetTimerValue(&timerCPU));
- 
+
   float *d_A;
   double *d_b, *d_x, *d_x_new;
-  
+
   d_b = sycl::malloc_device<double>(N_ROWS, q);
 
-  d_A = (float *)sycl::malloc_device(sizeof(float) * N_ROWS * N_ROWS,
-                                          q);
+  d_A = (float *)sycl::malloc_device(sizeof(float) * N_ROWS * N_ROWS, q);
   d_x = sycl::malloc_device<double>(N_ROWS, q);
   d_x_new = sycl::malloc_device<double>(N_ROWS, q);
 
@@ -156,7 +159,7 @@ int main(int argc, char **argv) {
   q.memset(d_x_new, 0, sizeof(double) * N_ROWS);
   q.memcpy(d_A, A, sizeof(float) * N_ROWS * N_ROWS);
   q.memcpy(d_b, b, sizeof(double) * N_ROWS);
-  
+
   q.wait();
 
   sdkCreateTimer(&timerGpu);
@@ -168,7 +171,8 @@ int main(int argc, char **argv) {
         d_A, d_b, conv_threshold, max_iter, d_x, d_x_new, q);
 
   } else if (gpumethod == 1) {
-    sumGPU = JacobiMethodGpu(d_A, d_b, conv_threshold, max_iter, d_x, d_x_new, q);
+    sumGPU =
+        JacobiMethodGpu(d_A, d_b, conv_threshold, max_iter, d_x, d_x_new, q);
   }
   sdkStopTimer(&timerGpu);
   printf("Device Processing time: %f (ms)\n", sdkGetTimerValue(&timerGpu));

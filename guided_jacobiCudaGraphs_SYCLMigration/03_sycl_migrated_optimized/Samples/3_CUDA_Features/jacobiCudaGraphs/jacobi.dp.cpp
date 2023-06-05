@@ -31,11 +31,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <sycl/sycl.hpp>
-#include <dpct/dpct.hpp>
-#include <taskflow/sycl/syclflow.hpp>
 #include <helper_cuda.h>
+
+#include <dpct/dpct.hpp>
+#include <sycl/sycl.hpp>
+#include <taskflow/sycl/syclflow.hpp>
 #include <vector>
+
 #include "jacobi.h"
 
 // 8 Rows of square-matrix A processed by each CTA.
@@ -50,7 +52,7 @@ __device__ double atomicAdd(double *address, double val) {
   unsigned long long int old = *address_as_ull, assumed;
 
   do {
-         assumed = old;
+    assumed = old;
     old = atomicCAS(address_as_ull, assumed,
                     __double_as_longlong(val + __longlong_as_double(assumed)));
 
@@ -63,10 +65,9 @@ __device__ double atomicAdd(double *address, double val) {
 #endif
 
 static void JacobiMethod(const float *A, const double *b,
-                                    const float conv_threshold, double *x,
-                                    double *x_new, double *sum,
-                                    const sycl::nd_item<3> &item_ct1,
-                                    double *x_shared, double *b_shared) {
+                         const float conv_threshold, double *x, double *x_new,
+                         double *sum, const sycl::nd_item<3> &item_ct1,
+                         double *x_shared, double *b_shared) {
   // Handle to thread block group
   auto cta = item_ct1.get_group();
 
@@ -90,27 +91,29 @@ static void JacobiMethod(const float *A, const double *b,
 
   for (int k = 0, i = item_ct1.get_group(2) * ROWS_PER_CTA;
        (k < ROWS_PER_CTA) && (i < N_ROWS); k++, i++) {
-            double rowThreadSum = 0.0;
+    double rowThreadSum = 0.0;
     for (int j = item_ct1.get_local_id(2); j < N_ROWS;
          j += item_ct1.get_local_range(2)) {
       rowThreadSum += (A[i * N_ROWS + j] * x_shared[j]);
     }
-    
-    rowThreadSum = sycl::reduce_over_group(tile32, rowThreadSum, sycl::plus<double>());
+
+    rowThreadSum =
+        sycl::reduce_over_group(tile32, rowThreadSum, sycl::plus<double>());
 
     if (tile32.get_local_linear_id() == 0) {
-       sycl::atomic_ref<double, sycl::memory_order::relaxed, sycl::memory_scope::device,
-                  sycl:: access::address_space::generic_space>
-        at_h_sum{b_shared[i % (ROWS_PER_CTA + 1)]};
-        at_h_sum -= rowThreadSum;
+      sycl::atomic_ref<double, sycl::memory_order::relaxed,
+                       sycl::memory_scope::device,
+                       sycl::access::address_space::generic_space>
+          at_h_sum{b_shared[i % (ROWS_PER_CTA + 1)]};
+      at_h_sum -= rowThreadSum;
     }
   }
 
   item_ct1.barrier();
 
   if (item_ct1.get_local_id(2) < ROWS_PER_CTA) {
-    dpct::experimental::logical_group tile8 = dpct::experimental::logical_group(
-        item_ct1, cta, ROWS_PER_CTA);
+    dpct::experimental::logical_group tile8 =
+        dpct::experimental::logical_group(item_ct1, cta, ROWS_PER_CTA);
 
     double temp_sum = 0.0;
 
@@ -127,16 +130,17 @@ static void JacobiMethod(const float *A, const double *b,
     }
 
     for (int offset = tile8.get_local_linear_range() / 2; offset > 0;
-                                                  offset /= 2) {
+         offset /= 2) {
       temp_sum += dpct::shift_sub_group_left(item_ct1.get_sub_group(), temp_sum,
                                              offset, 8);
     }
 
     if (tile32.get_local_linear_id() == 0) {
-             sycl::atomic_ref<double, sycl::memory_order::relaxed, sycl::memory_scope::device,
-                  sycl::access::address_space::generic_space>
-       at_sum{*sum};
-       at_sum += temp_sum;
+      sycl::atomic_ref<double, sycl::memory_order::relaxed,
+                       sycl::memory_scope::device,
+                       sycl::access::address_space::generic_space>
+          at_sum{*sum};
+      at_sum += temp_sum;
     }
   }
 }
@@ -170,19 +174,19 @@ static void finalError(double *x, double *g_sum,
 
   double blockSum = 0.0;
   if (item_ct1.get_local_id(2) <
-      (item_ct1.get_local_range(2) /
-       tile32.get_local_range().get(0))) {
+      (item_ct1.get_local_range(2) / tile32.get_local_range().get(0))) {
     blockSum = warpSum[item_ct1.get_local_id(2)];
   }
 
   if (item_ct1.get_local_id(2) < 32) {
-
     blockSum = sycl::reduce_over_group(tile32, blockSum, sycl::plus<double>());
 
     if (tile32.get_local_linear_id() == 0) {
-       sycl::atomic_ref<double, sycl::memory_order::relaxed, sycl::memory_scope::device, sycl::access::address_space::generic_space>
-        at_g_sum{*g_sum};
-        at_g_sum += blockSum;
+      sycl::atomic_ref<double, sycl::memory_order::relaxed,
+                       sycl::memory_scope::device,
+                       sycl::access::address_space::generic_space>
+          at_g_sum{*g_sum};
+      at_g_sum += blockSum;
     }
   }
 }
@@ -205,68 +209,72 @@ double JacobiMethodGpuCudaGraphExecKernelSetParams(
   d_sum = sycl::malloc_device<double>(1, q);
   int k = 0;
 
-  tf::Task syclDeviceTasks = tflow.emplace_on([&](tf::syclFlow &sf) {
+  tf::Task syclDeviceTasks =
+      tflow
+          .emplace_on(
+              [&](tf::syclFlow &sf) {
+                tf::syclTask dsum_memset =
+                    sf.memset(d_sum, 0, sizeof(double)).name("dsum_memset");
 
-  tf::syclTask dsum_memset = sf.memset(d_sum, 0, sizeof(double)) .name("dsum_memset");
-
-  tf::syclTask jM_kernel =
+                tf::syclTask jM_kernel =
                     sf.on([=](sycl::handler &cgh) {
-                         sycl::local_accessor<double, 1> x_shared_acc_ct1(
-                             sycl::range<1>(N_ROWS), cgh);
+                        sycl::local_accessor<double, 1> x_shared_acc_ct1(
+                            sycl::range<1>(N_ROWS), cgh);
 
-                    sycl::local_accessor<double, 1> b_shared_acc_ct1(
-                        sycl::range<1>(ROWS_PER_CTA + 1), cgh);
+                        sycl::local_accessor<double, 1> b_shared_acc_ct1(
+                            sycl::range<1>(ROWS_PER_CTA + 1), cgh);
                         cgh.parallel_for(
                             sycl::nd_range<3>(nblocks * nthreads, nthreads),
-                            [=](sycl::nd_item<3> item_ct1)
-                                [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
-                                    JacobiMethod(A, b, conv_threshold, params[k % 2], params[(k + 1) % 2], d_sum, item_ct1,
-                           x_shared_acc_ct1.get_pointer(),
-                           b_shared_acc_ct1.get_pointer());
-                                    });
-                        }).name("jacobi_kernel");
+                            [=](sycl::nd_item<3> item_ct1) [
+                                [intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
+                              JacobiMethod(A, b, conv_threshold, params[k % 2],
+                                           params[(k + 1) % 2], d_sum, item_ct1,
+                                           x_shared_acc_ct1.get_pointer(),
+                                           b_shared_acc_ct1.get_pointer());
+                            });
+                      }).name("jacobi_kernel");
 
-  tf::syclTask sum_d2h = sf.memcpy(&sum, d_sum, sizeof(double)).name("sum_d2h");
-  q.wait();
+                tf::syclTask sum_d2h =
+                    sf.memcpy(&sum, d_sum, sizeof(double)).name("sum_d2h");
+                q.wait();
 
-  jM_kernel.succeed(dsum_memset).precede(sum_d2h);
-  }, q).name("syclTasks");
-  
+                jM_kernel.succeed(dsum_memset).precede(sum_d2h);
+              },
+              q)
+          .name("syclTasks");
+
   for (k = 0; k < max_iter; k++) {
-
     exe.run(tflow).wait();
 
     if (sum <= conv_threshold) {
-
       q.memset(d_sum, 0, sizeof(double));
       nblocks[2] = (N_ROWS / nthreads[2]) + 1;
 
-      size_t sharedMemSize = ((nthreads[2] / SUB_GRP_SIZE) + 1) * sizeof(double);
+      size_t sharedMemSize =
+          ((nthreads[2] / SUB_GRP_SIZE) + 1) * sizeof(double);
       if ((k & 1) == 0) {
-                      
         q.submit([&](sycl::handler &cgh) {
           sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(
               sycl::range<1>(sharedMemSize), cgh);
 
-          cgh.parallel_for(sycl::nd_range<3>(nblocks * nthreads, nthreads),
-                           [=](sycl::nd_item<3> item_ct1)
-                               [[intel::reqd_sub_group_size(32)]] {
-                                 finalError(x_new, d_sum, item_ct1,
-                                            dpct_local_acc_ct1.get_pointer());
-                               });
+          cgh.parallel_for(
+              sycl::nd_range<3>(nblocks * nthreads, nthreads), [=
+          ](sycl::nd_item<3> item_ct1) [[intel::reqd_sub_group_size(32)]] {
+                finalError(x_new, d_sum, item_ct1,
+                           dpct_local_acc_ct1.get_pointer());
+              });
         });
       } else {
-
         q.submit([&](sycl::handler &cgh) {
           sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(
               sycl::range<1>(sharedMemSize), cgh);
 
-          cgh.parallel_for(sycl::nd_range<3>(nblocks * nthreads, nthreads),
-                           [=](sycl::nd_item<3> item_ct1)
-                               [[intel::reqd_sub_group_size(32)]] {
-                                 finalError(x, d_sum, item_ct1,
-                                            dpct_local_acc_ct1.get_pointer());
-                               });
+          cgh.parallel_for(
+              sycl::nd_range<3>(nblocks * nthreads, nthreads), [=
+          ](sycl::nd_item<3> item_ct1) [[intel::reqd_sub_group_size(32)]] {
+                finalError(x, d_sum, item_ct1,
+                           dpct_local_acc_ct1.get_pointer());
+              });
         });
       }
       q.memcpy(&sum, d_sum, sizeof(double)).wait();
@@ -284,7 +292,7 @@ double JacobiMethodGpu(const float *A, const double *b,
                        double *x, double *x_new, sycl::queue q) {
   // CTA size
   sycl::range<3> nthreads(1, 1, 256);
-   // grid size
+  // grid size
   sycl::range<3> nblocks(1, 1, (N_ROWS / ROWS_PER_CTA) + 2);
 
   double sum = 0.0;
@@ -293,43 +301,40 @@ double JacobiMethodGpu(const float *A, const double *b,
   int k = 0;
 
   for (k = 0; k < max_iter; k++) {
-    
     q.memset(d_sum, 0, sizeof(double));
     if ((k & 1) == 0) {
-
       q.submit([&](sycl::handler &cgh) {
-
-        sycl::local_accessor<double, 1> x_shared_acc_ct1(
-            sycl::range<1>(N_ROWS), cgh);
+        sycl::local_accessor<double, 1> x_shared_acc_ct1(sycl::range<1>(N_ROWS),
+                                                         cgh);
 
         sycl::local_accessor<double, 1> b_shared_acc_ct1(
             sycl::range<1>(ROWS_PER_CTA + 1), cgh);
 
         cgh.parallel_for(
             sycl::nd_range<3>(nblocks * nthreads, nthreads),
-            [=](sycl::nd_item<3> item_ct1) [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
-              JacobiMethod(A, b, conv_threshold, x, x_new, d_sum, item_ct1,
-                           x_shared_acc_ct1.get_pointer(),
-                           b_shared_acc_ct1.get_pointer());
-            });
+            [=](sycl::nd_item<3> item_ct1)
+                [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
+                  JacobiMethod(A, b, conv_threshold, x, x_new, d_sum, item_ct1,
+                               x_shared_acc_ct1.get_pointer(),
+                               b_shared_acc_ct1.get_pointer());
+                });
       });
     } else {
-
       q.submit([&](sycl::handler &cgh) {
-
-        sycl::local_accessor<double, 1> x_shared_acc_ct1(
-            sycl::range<1>(N_ROWS), cgh);
+        sycl::local_accessor<double, 1> x_shared_acc_ct1(sycl::range<1>(N_ROWS),
+                                                         cgh);
 
         sycl::local_accessor<double, 1> b_shared_acc_ct1(
             sycl::range<1>(ROWS_PER_CTA + 1), cgh);
 
         cgh.parallel_for(
             sycl::nd_range<3>(nblocks * nthreads, nthreads),
-            [=](sycl::nd_item<3> item_ct1) [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
-              JacobiMethod(A, b, conv_threshold, x_new, x, d_sum, item_ct1,
-                           x_shared_acc_ct1.get_pointer(),
-                           b_shared_acc_ct1.get_pointer());
-            });
+            [=](sycl::nd_item<3> item_ct1)
+                [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
+                  JacobiMethod(A, b, conv_threshold, x_new, x, d_sum, item_ct1,
+                               x_shared_acc_ct1.get_pointer(),
+                               b_shared_acc_ct1.get_pointer());
+                });
       });
     }
     q.memcpy(&sum, d_sum, sizeof(double)).wait();
@@ -338,32 +343,33 @@ double JacobiMethodGpu(const float *A, const double *b,
       q.memset(d_sum, 0, sizeof(double));
       nblocks[2] = (N_ROWS / nthreads[2]) + 1;
 
-      size_t sharedMemSize = ((nthreads[2] / SUB_GRP_SIZE) + 1) * sizeof(double);
+      size_t sharedMemSize =
+          ((nthreads[2] / SUB_GRP_SIZE) + 1) * sizeof(double);
       if ((k & 1) == 0) {
-
         q.submit([&](sycl::handler &cgh) {
           sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(
               sycl::range<1>(sharedMemSize), cgh);
 
-          cgh.parallel_for(sycl::nd_range<3>(nblocks * nthreads, nthreads),
-                           [=](sycl::nd_item<3> item_ct1)
-                               [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
-                                 finalError(x_new, d_sum, item_ct1,
-                                            dpct_local_acc_ct1.get_pointer());
-                               });
+          cgh.parallel_for(
+              sycl::nd_range<3>(nblocks * nthreads, nthreads),
+              [=](sycl::nd_item<3> item_ct1)
+                  [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
+                    finalError(x_new, d_sum, item_ct1,
+                               dpct_local_acc_ct1.get_pointer());
+                  });
         });
       } else {
-
         q.submit([&](sycl::handler &cgh) {
           sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(
               sycl::range<1>(sharedMemSize), cgh);
 
-          cgh.parallel_for(sycl::nd_range<3>(nblocks * nthreads, nthreads),
-                           [=](sycl::nd_item<3> item_ct1)
-                               [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
-                                 finalError(x, d_sum, item_ct1,
-                                            dpct_local_acc_ct1.get_pointer());
-                               });
+          cgh.parallel_for(
+              sycl::nd_range<3>(nblocks * nthreads, nthreads),
+              [=](sycl::nd_item<3> item_ct1)
+                  [[intel::reqd_sub_group_size(SUB_GRP_SIZE)]] {
+                    finalError(x, d_sum, item_ct1,
+                               dpct_local_acc_ct1.get_pointer());
+                  });
         });
       }
 
@@ -377,4 +383,3 @@ double JacobiMethodGpu(const float *A, const double *b,
   sycl::free(d_sum, q);
   return sum;
 }
-      

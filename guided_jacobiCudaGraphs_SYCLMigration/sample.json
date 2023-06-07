@@ -15,7 +15,10 @@
                         "cd build",
                         "cmake ..",
                         "make",
-                        "make run"
+                        "make run0",
+                        "make run1",
+                        "make run_smo0",
+                        "make run_smo1"
                  ]
         }]
 

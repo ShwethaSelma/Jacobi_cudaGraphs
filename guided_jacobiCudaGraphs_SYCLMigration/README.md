@@ -59,7 +59,7 @@ In this sample, the vectors are loaded into shared memory for faster memory acce
 The computation kernels can be scheduled using two alternative types of host function calls:
 
 1.  Host function `JacobiMethodGpuCudaGraphExecKernelSetParams()`, which uses explicit CUDA Graph APIs 
-2.  Host function `JacobiMethodGpu()`, which uses regular CUDA API's to launch kernels.
+2.  Host function `JacobiMethodGpu()`, which uses regular CUDA APIs to launch kernels.
 
 >  **Note**: Refer to [Workflow for a CUDA* to SYCL* Migration](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/cuda-sycl-migration-workflow.html#gs.s2njvh) for general information about the migration workflow.
 
@@ -79,7 +79,7 @@ In both `Jacobi Method` and `Final Error` Kernels reduction is performed to obta
 The kernel uses cooperative groups, warp-level primitives, atomics and shared memory for the faster and frequent memory access to the block. These computation are loaded into kernel by host function which can be achieved through any one of the three methods. 
   1.  `JacobiMethodGpuCudaGraphExecKernelSetParams()`, which uses explicit CUDA Graph APIs
   2.  `JacobiMethodGpuCudaGraphExecUpdate()`, which uses CUDA stream capture APIs to launch
-  3.  `JacobiMethodGpu()`, which uses regular CUDA API's to launch kernels. 
+  3.  `JacobiMethodGpu()`, which uses regular CUDA APIs to launch kernels. 
   
   We migrate the first and third host function using SYCLomatic. We then migrate the remaining CUDA Graphs code section using [Taskflow](https://github.com/taskflow/taskflow) Programming Model. 
   We do not migrate `JacobiMethodGpuCudaGraphExecUpdate()`, because CUDA Stream Capture APIs are not yet supported in SYCL.

@@ -23,7 +23,7 @@ The parallel implementation demonstrates the use of CUDA Graph through explicit 
 
  This sample illustrates the steps needed for manual migration of explicit CUDA Graph API's such as `cudaGraphCreate()`, `cudaGraphAddMemcpyNode()`, `cudaGraphLaunch()` to SYCL equivalent API's using [Taskflow](https://github.com/taskflow/taskflow) programming Model.
 
-> **Note**: The sample used the open-source SYCLomatic tool that assists developers in porting CUDA code to SYCL code. To finish the process, you must complete the rest of the coding manually and then tune to the desired level of performance for the target architecture. You can also use the Intel® DPC++ Compatibility Tool available to augment Base Toolkit.
+>  **Note**: The sample used the open-source SYCLomatic tool that assists developers in porting CUDA code to SYCL code. To finish the process, you must complete the rest of the coding manually and then tune to the desired level of performance for the target architecture. You can also use the Intel® DPC++ Compatibility Tool available to augment Base Toolkit.
 
 This sample contains three versions in the following folders:
 
@@ -61,7 +61,7 @@ The computation kernels can be scheduled using two alternative types of host fun
 1.  Host function `JacobiMethodGpuCudaGraphExecKernelSetParams()`, which uses explicit CUDA Graph APIs 
 2.  Host function `JacobiMethodGpu()`, which uses regular CUDA API's to launch kernels.
 
->**Note**: Refer to [Workflow for a CUDA* to SYCL* Migration](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/cuda-sycl-migration-workflow.html#gs.s2njvh) for general information about the migration workflow.
+>  **Note**: Refer to [Workflow for a CUDA* to SYCL* Migration](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/cuda-sycl-migration-workflow.html#gs.s2njvh) for general information about the migration workflow.
 
 ### CUDA Source Code Evaluation
 
@@ -241,11 +241,13 @@ Once you migrate the CUDA code to SYCL successfully and you have functional code
       rowThreadSum += tile32.shuffle_down(rowThreadSum, offset);
     }
     ```
-    The sub-group function `shuffle_down` works by exchanging values between work-items in the sub-group via a shift. But needs to be looped to iterate among the sub-groups. 
+    
+The sub-group function `shuffle_down` works by exchanging values between work-items in the sub-group via a shift. But needs to be looped to iterate among the sub-groups. 
+    
     ```
     rowThreadSum = sycl::reduce_over_group(tile32, rowThreadSum, sycl::plus<double>());
     ```
-    The migrated code snippet with `shuffle_down` API can be replaced with `reduce_over_group` to get better performance. The reduce_over_group implements the generalized sum of the array elements internally by combining values held directly by the work-items in a group. The work-group reduces a number of values equal to the size of the group and each work-item provides one value.
+The migrated code snippet with `shuffle_down` API can be replaced with `reduce_over_group` to get better performance. The reduce_over_group implements the generalized sum of the array elements internally by combining values held directly by the work-items in a group. The work-group reduces a number of values equal to the size of the group and each work-item provides one value.
 
 #### Atomic operation optimization
     ```
@@ -254,7 +256,8 @@ Once you migrate the CUDA code to SYCL successfully and you have functional code
           &b_shared[i % (ROWS_PER_CTA + 1)], -rowThreadSum);
     }
     ```
-    The `atomic_fetch_add` operation calls automatically add on SYCL atomic object. Here, the atomic_fetch_add is used to sum all the subgroup values into rowThreadSum variable. This can be optimized by replacing the atomic_fetch_add with atomic_ref from sycl namespace.
+    
+The `atomic_fetch_add` operation calls automatically add on SYCL atomic object. Here, the atomic_fetch_add is used to sum all the subgroup values into rowThreadSum variable. This can be optimized by replacing the atomic_fetch_add with atomic_ref from sycl namespace.
     ```
     if (tile32.get_local_linear_id() == 0) {
        sycl::atomic_ref<double, sycl::memory_order::relaxed, sycl::memory_scope::device,
@@ -263,13 +266,14 @@ Once you migrate the CUDA code to SYCL successfully and you have functional code
         at_h_sum -= rowThreadSum;
     }
     ```
-    The `sycl::atomic_ref`, references to value of the object to be added. The result is then assigned to the value of the referenced object.
+    
+The `sycl::atomic_ref`, references to value of the object to be added. The result is then assigned to the value of the referenced object.
 
 These optimization changes are performed in JacobiMethod and FinalError Kernels which can be found in `03_sycl_migrated_optimized` folder.
 
 ## Build and Run the `Jacobi CUDA Graphs` Sample
 
-> **Note**: If you have not already done so, set up your CLI
+>  **Note**: If you have not already done so, set up your CLI
 > environment by sourcing  the `setvars` script in the root of your oneAPI installation.
 >
 > Linux*:

@@ -21,7 +21,7 @@ The parallel implementation demonstrates the use of CUDA Graph through explicit 
 - Streams 
 - Atomics
 
- This sample illustrates the steps needed for manual migration of explicit CUDA Graph API's such as `cudaGraphCreate()`, `cudaGraphAddMemcpyNode()`, `cudaGraphLaunch()` to SYCL equivalent API's using [Taskflow](https://github.com/taskflow/taskflow) programming Model.
+ This sample illustrates the steps needed for manual migration of explicit CUDA Graph APIs such as `cudaGraphCreate()`, `cudaGraphAddMemcpyNode()`, `cudaGraphLaunch()` to SYCL equivalent APIs using [Taskflow](https://github.com/taskflow/taskflow) programming Model.
 
 >  **Note**: The sample used the open-source SYCLomatic tool that assists developers in porting CUDA code to SYCL code. To finish the process, you must complete the rest of the coding manually and then tune to the desired level of performance for the target architecture. You can also use the Intel® DPC++ Compatibility Tool available to augment Base Toolkit.
 
@@ -94,7 +94,7 @@ When working with the command-line interface (CLI), you should configure the one
 
 ### Migrate the Code using SYCLomatic
 
-For this sample, the SYCLomatic tool automatically migrates ~80% of the CUDA runtime API's to SYCL. Follow these steps to generate the SYCL code using the compatibility tool.
+For this sample, the SYCLomatic tool automatically migrates ~80% of the CUDA runtime APIs to SYCL. Follow these steps to generate the SYCL code using the compatibility tool.
 
 1. Clone the required GitHub repository to your local environment.
    ```
